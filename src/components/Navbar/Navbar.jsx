@@ -6,18 +6,28 @@ import Search_icon from "../../assets/search_icon.svg";
 import Bell_icon from "../../assets/bell_icon.svg";
 import Profile_img from "../../assets/profile_img.png";
 import Caret_icon from "../../assets/caret_icon.svg";
+import { logout } from "../../firebase";
 
 const Navbar = () => {
   const navRef = useRef();
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY >= 80) {
-        navRef.current.classList.add("nav-dark");
-      } else {
-        navRef.current.classList.remove("nav-dark");
+    const handleScroll = () => {
+      if (navRef.current) {
+        if (window.scrollY >= 80) {
+          navRef.current.classList.add("nav-dark");
+        } else {
+          navRef.current.classList.remove("nav-dark");
+        }
       }
-    });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
@@ -43,7 +53,7 @@ const Navbar = () => {
           <img src={Profile_img} alt="" className="profile" />
           <img src={Caret_icon} alt="" className="" />
           <div className="dropdown">
-            <p>Sign out of Netflix</p>
+            <p onClick={() => {logout()}}>Sign out of Netflix</p>
           </div>
         </div>
       </div>
